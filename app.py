@@ -36,5 +36,5 @@ from fileOps import fileStat
 myfileStat = fileStat("sample.txt")
 if (myfileStat.fileReady):
     pass
-    print(myfileStat.getStat())
+    print(myfileStat.getFileStat())
     

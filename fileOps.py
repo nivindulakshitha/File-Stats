@@ -1,16 +1,18 @@
 import os
+from datetime import datetime
 
-class fileStat:
+class file:
     def __init__(self, filepath):
-        self.filepath = filepath
-        
-        
+        self.filepath = filepath      
+
+class fileStat(file):
+    
+    def __init__(self, filepath):
+        super().__init__(filepath)
         self.fileReady = False
         self.filestat = {}
         self.__getFileReady()
-        self.__prepareStat()
-        
-        
+    
     def __getFileReady(self):
         try:
             with open(file=self.filepath, mode="r", encoding="utf8") as file:
@@ -18,6 +20,7 @@ class fileStat:
                 self.filestat["readyState"] = True
                 self.filestat["readyStateError"] = NotImplemented
                 self.filestat["readyStateErrorLog"] = NotImplemented
+                self.__prepareFileStat()
             
         except FileNotFoundError as error:
             self.filestat["readyState"] = False
@@ -42,17 +45,21 @@ class fileStat:
         self.filepath = new_filepath
         self.__getFileReady()
         
-    def __prepareStat(self):
+    def __prepareFileStat(self):
         file_stat = os.stat(self.filepath)
         properties = {
+            "fullpath": os.path.abspath(self.filepath),
             "size": file_stat.st_size,
             "ownerUid": file_stat.st_uid,
             "groupGid": file_stat.st_gid,
-            "lastAccessed": file_stat.st_atime,
-            "lastModified": file_stat.st_mtime,
-            "creationTime": file_stat.st_birthtime
+            "lastAccessed": self.__formatTimestamp(file_stat.st_atime),
+            "lastModified": self.__formatTimestamp(file_stat.st_mtime),
+            "creationTime": self.__formatTimestamp(file_stat.st_birthtime)
         }
         self.filestat.update(properties)
         
-    def getStat(self):
+    def __formatTimestamp(self, timestamp):
+        return datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+        
+    def getFileStat(self):
         return self.filestat
