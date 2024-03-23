@@ -1,6 +1,6 @@
-import os
+""" import os
 
-def viewStat(filepath):        
+def viewStat(filepath, view_content):        
     if (not os.path.exists(filepath)):
         print("Path is not locatable.")
     
@@ -19,10 +19,22 @@ def viewStat(filepath):
 
             splitted_content = file_content.strip().split()
             print(f"Total number of words: {len(splitted_content)}")
+            
+            if (view_content):
+                print(file_content)
 
 def runApp():
     filepath = input("Enter file location: ")
-    viewStat(filepath)
+    view_content = True if input("Do you want to see the content? (yes/no): ") == "yes" else False
+    viewStat(filepath, view_content)
 
 if __name__ == "__main__":
-    runApp()
+    runApp() """
+    
+from fileOps import fileStat
+
+myfileStat = fileStat("sample.txt")
+if (myfileStat.fileReady):
+    pass
+    print(myfileStat.getStat())
+    
